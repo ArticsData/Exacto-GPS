@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button btn_newWaypoint;
     Button btn_showWayPointList;
+    Button btn_showMap;
 
     Switch sw_locationupdates;
     Switch sw_gps;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn_newWaypoint = findViewById(R.id.btn_newWayPoint);
         btn_showWayPointList = findViewById(R.id.btn_showWayPointList);
+        btn_showMap = findViewById(R.id.btn_showMap);
 
         sw_gps = findViewById(R.id.sw_gps);
         sw_locationupdates = findViewById(R.id.sw_locationsupdates);
@@ -139,6 +141,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, ShowSavedLocationsList.class);
+                startActivity(i);
+            }
+        });
+
+        btn_showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(i);
             }
         });
