@@ -1,13 +1,22 @@
 package com.example.exactogps;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MainActivity extends AppCompatActivity {
     //How often the application updates the location (default or fast)
@@ -69,5 +78,50 @@ public class MainActivity extends AppCompatActivity {
 
         //Sets the priority of the app to maintaining an optimal balance between location accuracy and device power.
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        sw_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sw_gps.isChecked()) {
+                    //Changes it to the most accurate option -- GPS
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    tv_sensor.setText("Using GPS sensors");
+                } else {
+                    //Changes it to the less accurate (but more battery-efficent) option -- Cell Towers
+                    locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                    tv_sensor.setText("Using Towers + WIFI");
+                }
+            }
+        });
+    } //End onCreate method
+
+    private void updateGPS() {
+        //Get permissions from the user to track GPS
+        //Get the current location from the fused client
+        //Update the UI -- i.e. set all properties in their associated text view items.
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //User provided the permission
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+
+                @Override
+                public void onSuccess(Location location) {
+                    //User manually enabled permissions. Put the values of location. Add various tidbits of information into the UI components.
+
+                }
+            });
+            
+        } else {
+            //Permissions not granted yet.
+
+            //Checks to see if user OS build version is compatible
+            if(Build.VERSION >= Build.VERSION_CODES.M) {
+                Toast.makeText(this, "Please enable location tracking", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Sorry, you need to upgrade to " + Build.VERSION_CODES.M, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
