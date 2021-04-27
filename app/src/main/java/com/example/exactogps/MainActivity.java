@@ -1,5 +1,6 @@
 package com.example.exactogps;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     //How often the application updates the location (default or fast)
     public static final int DEFAULT_UPDATE_INTERVAL = 30;
     public static final int FAST_UPDATE_INTERVAL = 5;
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
 
     //References to the UI elements
 
@@ -93,7 +95,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        updateGPS();
+
     } //End onCreate method
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch(requestCode) {
+            case PERMISSIONS_FINE_LOCATION:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateGPS();
+                } else {
+                    Toast.makeText(this, "This app requires permission to be granted in order to work properly", Toast.LENGTH_LONG).show();
+                    //This part seems to crash the app
+                    //finish();
+                }
+        }
+    }
 
     private void updateGPS() {
         //Get permissions from the user to track GPS
@@ -109,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
                     //User manually enabled permissions. Put the values of location. Add various tidbits of information into the UI components.
-
+                    updateUIValues(location);
                 }
             });
             
@@ -117,11 +138,31 @@ public class MainActivity extends AppCompatActivity {
             //Permissions not granted yet.
 
             //Checks to see if user OS build version is compatible
-            if(Build.VERSION >= Build.VERSION_CODES.M) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Toast.makeText(this, "Please enable location tracking", Toast.LENGTH_LONG).show();
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
             } else {
                 Toast.makeText(this, "Sorry, you need to upgrade to " + Build.VERSION_CODES.M, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void updateUIValues(Location location) {
+        //Update all of the TextView objects with a new location
+        tv_lat.setText(String.valueOf(location.getLatitude()));
+        tv_lon.setText(String.valueOf(location.getLongitude()));
+        tv_accuracy.setText(String.valueOf(location.getAccuracy()));
+
+        if(location.hasAltitude()) {
+            tv_altitude.setText(String.valueOf(location.getAltitude()));
+        } else {
+            tv_altitude.setText("Not available");
+        }
+
+        if (location.hasSpeed()) {
+            tv_speed.setText(String.valueOf(location.getAltitude()));
+        } else {
+            tv_speed.setText("Not available");
         }
     }
 }
