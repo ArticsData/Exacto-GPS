@@ -3,3 +3,5 @@ The uploaded version of the Exacto GPS utility app for the Android mobile operat
 
 See this link for this project presentation:
 https://docs.google.com/presentation/d/1auIburMqpC1KSbYkwZfJv1240ucI_3Rm_aPmXLfjdUs/edit?usp=sharing
+
+TODO: Clean up this README.md file and add additional information.
