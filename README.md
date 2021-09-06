@@ -1,6 +1,6 @@
 ### Welcome to Exacto-GPS
 
-<img src="https://user-images.githubusercontent.com/58315985/132253745-5d12facc-b309-44ec-aaee-4ef53900265b.jpeg" alt="drawing" width="200"/>
+<img src="https://user-images.githubusercontent.com/58315985/132254091-efcf4416-5336-4bb2-aaf8-4751cc0588e8.png" alt="drawing" width="200"/>
 
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
